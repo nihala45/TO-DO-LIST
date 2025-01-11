@@ -7,23 +7,29 @@
 }
 
 body {
+  display: flex; /* Use Flexbox to align the content */
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+  height: 100vh; /* Take full viewport height */
+  margin: 0;
   background: linear-gradient(
     90deg,
     rgba(48, 16, 255, 1) 0%,
-    rgba(100, 115, 255, 1) 100%
+    rgba(9, 115, 255, 1) 100%
   );
 }
+
 .todo-app {
   display: flex;
   flex-direction: column;
   justify-content: start;
-  width: 520px;
-  min-height: 600px;
-  background: #161a2b;
+  width: 700px;
+  min-height: 800px;
+  background: #030816;
   text-align: center;
-  margin: 128px auto;
   border-radius: 10px;
   padding-bottom: 32px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25); /* Optional: Add some shadow for better visuals */
 }
 
 h1 {
@@ -100,7 +106,6 @@ h1 {
     rgba(255, 118, 20, 1) 0%,
     rgba(255, 84, 17, 1) 100%
   );
-
   padding: 16px;
   border-radius: 5px;
   width: 90%;
@@ -131,7 +136,7 @@ h1 {
 }
 
 .icons {
-  display: flex;
+  display: flex;  
   align-items: center;
   font-size: 24px;
   cursor: pointer;
@@ -145,3 +150,4 @@ h1 {
 .edit-icon {
   color: #fff;
 }
+

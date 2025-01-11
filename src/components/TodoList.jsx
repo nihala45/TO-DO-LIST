@@ -1,9 +1,25 @@
-import React, { useState } from 'react'; // Import React and the useState hook for state management
+import React, { useState, useEffect } from 'react';
 import TodoForm from './TodoForm'; // Import the TodoForm component
-import Todo from './Todo'
+import Todo from './Todo'; // Import the Todo component
+
 function TodoList() {
   // State to hold the list of todos
   const [todos, setTodos] = useState([]);
+
+  // Load todos from localStorage when the component mounts
+  useEffect(() => {
+    const savedTodos = JSON.parse(localStorage.getItem('todos'));
+    if (savedTodos) {
+      setTodos(savedTodos);
+    }
+  }, []);
+
+  // Save todos to localStorage whenever they change
+  useEffect(() => {
+    if (todos.length > 0) {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+  }, [todos]);
 
   // Function to add a new todo
   const addTodo = (todo) => {
@@ -17,45 +33,55 @@ function TodoList() {
 
     // Update the todos state with the new list
     setTodos(newTodos);
-
-    // Log the new todo and the updated todos list for debugging purposes
     console.log(todo, ...todos);
   };
 
-  const updateTodo = (todoId,newValue)=>{
-    if(!newValue.text ||  /^\s*$/.test(newValue.text)){
-        return;
+  // Update existing todo
+  const updateTodo = (todoId, newValue) => {
+    if (!newValue.text || /^\s*$/.test(newValue.text)) {
+      return;
     }
-    setTodos(prev => prev.map(item=>(item.id === todoId ? newValue:item)))
-  }
+    setTodos((prev) =>
+      prev.map((item) => (item.id === todoId ? newValue : item))
+    );
+  };
 
-  const removeTodo =  id => {
-    const removeArr = [...todos].filter(todo => todo.id !== id)
-    setTodos(removeArr)
-  }
+  // Remove todo by ID
+  const removeTodo = (id) => {
+    const removeArr = [...todos].filter((todo) => todo.id !== id);
+    setTodos(removeArr);
+  };
 
-  
-
-  const completeTodo = id => {
-    let updatedTodos = todos.map(todo => {
-        if(todo.id === id){
-            todo.isComplete = !todo.isComplete
-        }
-        return todo;
+  // Mark todo as completed
+  const completeTodo = (id) => {
+    let updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.isComplete = !todo.isComplete;
+      }
+      return todo;
     });
-    setTodos(updatedTodos)
-  }
+    setTodos(updatedTodos);
+  };
+
+  // Function to clear the todos from both state and localStorage
+  const clearTodos = () => {
+    setTodos([]);
+    localStorage.removeItem('todos');
+  };
 
   return (
     <div>
-      {/* Title for the Todo List */}
       <h1>What's the plan for today</h1>
-
-      {/* Render the TodoForm component and pass the addTodo function as a prop */}
       <TodoForm onSubmit={addTodo} />
-      <Todo todos={todos} completeTodo={completeTodo} removeTodo={removeTodo} updateTodo={updateTodo}/>
+      <Todo
+        todos={todos}
+        completeTodo={completeTodo}
+        removeTodo={removeTodo}
+        updateTodo={updateTodo}
+      />
+      <button onClick={clearTodos}>Clear All Todos</button>
     </div>
   );
 }
 
-export default TodoList; // Export the TodoList component for use in other parts of the app
+export default TodoList;
